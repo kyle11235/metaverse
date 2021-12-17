@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no" />
+
+  <!-- import CSS -->
+  <link rel="stylesheet" href="css/element-ui-2.15.16.css">
+
+  <style>
+    
+
+  </style>
+  
+</head>
+<body>
+  <div id="app">
+
+    <!-- login form -->
+    <div v-if="!hasLogin">
+
+      <el-row type="flex" justify="space-between" align="middle" class="" style="margin-top: 200px;">
+        
+        <el-col :span="4">
+        </el-col>
+        <el-col :span="8">
+          <h1>使用元数据，打通元宇宙</h1>
+          <el-form ref="user" :model="user" label-width="80px">
+              
+            <el-form-item label="用户名">
+              <el-input v-model="user.name" style="width: 200px;"></el-input>
+            </el-form-item>
+
+            <el-form-item label="密码">
+              <el-input v-model="user.password" show-password style="width: 200px;"></el-input>
+            </el-form-item>
+            
+            <el-form-item>
+              <el-button type="primary" @click="fnLogin">登录</el-button>
+            </el-form-item>
+
+          </el-form>   
+        </el-col>
+        <el-col :span="4">
+        </el-col>
+
+      </el-row>
+
+    </div>
+
+    <!-- logout -->
+    <div v-if="hasLogin" style="padding:20px;">
+
+      <el-row type="flex" justify="space-between" align="middle" class="">
+        
+        <el-col :span="4">
+          <div class="" style="text-align: center;">
+            <el-image
+              style="width: 80px; height: 80px"
+              :src="logo"
+              >
+            </el-image>
+          </div>
+        </el-col>
+
+        <el-col :span="16">
+          <div class="">
+            <h1>使用元数据，打通元宇宙</h1>
+          </div>
+        </el-col>
+
+        <el-col :span="4">
+          <div class="">
+            Welcome {{user.name}}
+            <el-button  @click="fnLogout">Logout</el-button>
+          </div>
+        </el-col>
+
+      </el-row>
+
+      <el-tabs v-model="activeName" type="card"   style="margin: 0 auto; width: 1200px">
+        <el-tab-pane label="0. 架构图" name="zero">
+          
+          <el-row type="flex" justify="center">
+            <el-col :span="1">
+              
+            </el-col>
+    
+            <el-col :span="20">
+              <div v-for="slide in slideList">
+                <el-image
+                  style="width: 100%"
+                  :src="slide"
+                  >
+                </el-image>
+              </div>
+            </el-col>
+    
+            <el-col :span="1">
+              
+            </el-col>
+          </el-row>
+        
+        </el-tab-pane>
+        <el-tab-pane label="1. 开发" name="first">
+          
+          <div style="text-align: center;  margin-top: 100px;">
+            <h1>JFrog CLI 是一个小巧灵敏的客户端命令行工具</h1>
+            它提供了一个简单的命令行界面，可以自动访问 JFrog 产品，<br>
+            简化您的自动化脚本，使它们更具可读性和更易于维护。 <br>
+
+          </div>
+
+          <div style="text-align: center; margin-top: 100px;">
+            1. 清理仓库 <br>
+            ./01_clear_repo_by_api.sh <br><br>
+
+            2. 上传制品 <br>
+            ./02_upload_heros_by_cli.sh <br><br>
+          </div>
+
+        
+        
+        </el-tab-pane>
+        <el-tab-pane label="2. 测试" name="second">
+    
+          <el-row type="flex" justify="center" align="middle" class="" style="margin-top: 0px;">
+            
+            <el-col :span="6">
+              <div class="" style="text-align: center;">
+                <el-button type="primary" plain @click="fnPrevious">< Previous </el-button>
+              </div>
+            </el-col>
+    
+            <el-col :span="12">
+              <div class="">
+                <el-card :body-style="{ padding: '0px' }">
+                
+                  <el-form ref="hero" :model="hero" label-width="150px">
+                    
+                    <img :src="hero.url" style="width:100%">
+    
+                    <div style="padding: 5px;">
+                    
+                      <el-form-item label="英雄称号 (nickname)" style="margin-bottom: 5px">
+                        <el-input v-model="hero.nickname" style="width: 200px"></el-input>
+                      </el-form-item>
+    
+                      <el-form-item label="英雄类别 (type)" style="margin-bottom: 5px">
+                        <el-radio-group v-model="hero.type">
+                          <el-radio label="刺客"></el-radio>
+                          <el-radio label="战士"></el-radio>
+                          <el-radio label="法师"></el-radio>
+                          <el-radio label="射手"></el-radio>
+                          <el-radio label="辅助"></el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+                    
+                      <el-form-item label="英雄标签 (tag)" style="margin-bottom: 5px">
+                        <el-input v-model="hero.tag" style="width: 200px"></el-input>
+                      </el-form-item>
+    
+                      <el-form-item label="测试完成 (tested)" style="margin-bottom: 5px">
+                        <el-switch v-model="hero.tested"></el-switch >
+                      </el-form-item>
+
+                      <el-form-item label="制品路径" style="margin-bottom: 5px;">
+                        {{ hero.repo }}/.../{{ hero.name }}
+                      </el-form-item>
+    
+                      <div class="" style="text-align: right;">
+                        <el-button type="primary" @click="fnUpdate">Update</el-button>
+                      </div>
+                      
+                    </div>
+                  
+                  </el-form>
+    
+                </el-card>        
+              </div>
+            </el-col>
+    
+            <el-col :span="6">
+              <div class="" style="text-align: center;">
+                <el-button type="primary" plain @click="fnNext(1)">Next ></el-button>
+              </div>
+            </el-col>
+    
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="3. 质量门禁" name="third">
+          
+          <el-row type="flex" justify="center">
+            <el-col :span="4">
+              
+            </el-col>
+    
+            <el-col :span="20">
+
+              <div>
+                <h1>Artifactory 查询语言 (AQL)</h1> 
+                专门设计用于让您发现与 Artifactory 中存储的工件和构建相关的任何数据。 <br>
+                它的语法提供了一种制定复杂查询的简单方法，这些查询指定了任意数量的搜索条件、过滤器、排序选项和输出参数。 <br>
+                AQL 作为 RESTful API 公开，它使用数据流来提供输出数据，从而实现极快的响应时间和低内存消耗。<br><br>
+               <h3> AQL 参考样例 </h3>
+              </div>
+<pre>
+items.find({
+  "$or":[
+    {
+    "$and":
+      [{
+      "repo": {"$eq" : "app1-generic-test-local"},
+      "path": {"$match" : "metaverse/hero"},
+      "@nickname": {"$match" : "luban"}
+      }]
+    },
+    {
+    "$and":
+      [{
+      "repo": {"$eq" : "app1-generic-test-local"},
+      "path": {"$match" : "metaverse/hero"},
+      "@nickname": {"$match" : "赵云"}
+      }]
+    }
+  ]
+})
+</pre>
+
+              <h3> 利用 AQL 聚合发布版本 </h3>
+              <el-form ref="releaseBundle" :model="releaseBundle" label-width="120px">
+                <el-form-item label="发版名称">
+                  <el-input v-model="releaseBundle.name" style="width: 200px;"></el-input>
+                </el-form-item>
+                
+                <el-form-item label="AQL">
+                  <el-input type="textarea" v-model="releaseBundle.aql"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="fnAQL()">Test</el-button>
+                  <el-button type="primary" @click="fnCreateRelease()">Create</el-button>
+                </el-form-item>
+              </el-form>
+
+
+            </el-col>
+    
+            <el-col :span="4">
+              
+            </el-col>
+          </el-row>
+          
+        </el-tab-pane>
+        <el-tab-pane label="4. 进入猿宇宙" name="fourth">
+          
+          <el-row type="flex" justify="center">
+            <el-col :span="4">
+            </el-col>
+    
+            <el-col :span="20">
+              <el-table
+                :data="tableData"
+                style="width: 100%">
+                <el-table-column
+                  prop="repo"
+                  label="制品库"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="releasePath"
+                  label="版本路径"
+                  width="280">
+                </el-table-column>
+                <el-table-column
+                  prop="heroList"
+                  label="制品">
+                  <template slot-scope="scope">
+                    
+                    <span v-for="hero in scope.row.heroList">
+                      <img :src="hero.url" style="width:300px">
+                    </span>
+
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+
+            <el-col :span="4">
+            </el-col>
+
+        </el-tab-pane>
+
+        <el-tab-pane label="5. 扫码抽奖" name="fifth">
+          
+          <el-row type="flex" justify="center">
+            <el-col :span="1">
+              
+            </el-col>
+    
+            <el-col :span="20">
+              
+                <el-image
+                  style="width: 100%"
+                  :src="lastSlide"
+                  >
+                </el-image>
+              
+            </el-col>
+    
+            <el-col :span="1">
+              
+            </el-col>
+          </el-row>
+        
+        </el-tab-pane>
+      </el-tabs>
+    
+    </div>
+    
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="js/vue-2.6.14.js"></script>
+  <!-- import JavaScript -->
+  <script src="js/element-ui-2.15.6.js"></script>
+  <script src="js/jquery.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { 
+          loading: false,
+          id: undefined,
+          user: {
+            name: 'kyle',
+            password: 'zhang',
+          },
+          hasLogin: false,
+          logo: 'images/Jfrog_Green_RGB.png',
+          slideList: [],
+          lastSlide: 'images/meta/Slide2.png',
+
+          devRepo:'app1-generic-dev-local',
+          testRepo:'app1-generic-test-local',
+          prodRepo:'app1-generic-prod-local',
+
+          hero: {
+            name: 'xxx.jpg',
+            
+            nickname: 'kyle',
+            type: '法师',
+            tag: '',
+            tested: false
+          },
+          heroIndex: 0,
+          heroList:[],
+          activeName: 'zero',
+          releaseBundle: {
+            name: '',
+            // aql:'items.find({"$or":[{"$and":[{"repo": {"$eq" : "app1-generic-test-local"},"path": {"$match" : "metaverse/hero"},"@nickname": {"$match" : "luban"}}]}]})'
+            aql: ''
+          },
+          tableData: []
+
+        }
+      },
+      created() {
+        let that = this;
+        Date.prototype.toStringLong = function () {
+            // yyyy-MM-dd hh:mm:ss
+            return this.getFullYear() + "-" + ("0" + (this.getMonth() + 1)).slice(-2) + "-" + ("0" + this.getDate()).slice(-2) + "_" + ("0" + this.getHours()).slice(-2) + ":" + ("0" + this.getMinutes()).slice(-2) + ":" + ("0" + this.getSeconds()).slice(-2);
+        };
+
+        for (let i=1; i<=1; i++) {
+          this.slideList.push('images/meta/Slide' + i + '.png');
+        }
+        
+        // login status
+        if(localStorage.user){
+          console.log('created, user=', localStorage.user)
+          
+          this.user = JSON.parse(localStorage.user)
+          if(this.user.name && this.user.password){
+            this.hasLogin = true
+          }
+        }
+
+        // id
+        this.id = this.getParam('id')
+        console.log('created, id=', this.id)
+
+        if (this.hasLogin && this.id) {
+          console.log('request id=' + this.id)
+        } 
+
+        let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.devRepo +'"},"path": {"$match" : "metaverse/hero"}}]},{"$and":[{"repo": {"$eq" : "'+ that.testRepo +'"},"path": {"$match" : "metaverse/hero"}}]}]})';
+        this.fnGetHeroList(payload, function(data){
+          that.heroList = data.results.map(e => {
+            let item = {
+              name: e.name,
+              repo: e.repo,
+              path: e.path,
+              
+              nickname: '',
+              type: '',
+              tag: '',
+              tested: false,
+
+              url: '../hero/' + e.name
+            }
+            return item;
+          });
+          if(that.heroList.length > 0){
+            that.hero = that.heroList[0];
+            that.fnGetHeroDetails(that.hero);
+          }
+        });
+
+        that.fnGetReleaseList();
+      },
+      methods: {
+        getParam: function(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+          var r = window.location.search.substr(1).match(reg)
+          if (r != null){
+            return decodeURI(r[2])
+          }
+          return null;
+        },
+        fnLogin: function() {
+          console.log('fnLogin, user=', this.user)
+          localStorage.user = JSON.stringify(this.user)
+          this.hasLogin = true;
+
+          
+        },
+        fnLogout: function() {
+          console.log('fnLogout')
+          localStorage.removeItem('user')
+          this.hasLogin = false
+        },
+        fnGetHeroList: function (payload, callback) {
+          let that = this;
+        
+          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+          
+          $.ajax({
+              type: "POST",
+              url: baseUrl,
+              data: payload,
+              contentType: "text/plain",
+              dataType:'json',
+              success: function (data) {
+
+                  callback(data);
+                  
+              }, error:function(data){
+                
+              }
+          });
+        },
+        fnGetHeroDetails: function (hero) {
+          let that = this;
+          if(that.loading){
+            that.$message({
+              showClose: true,
+              message: 'Loading... try again',
+              type: 'warn'
+            });
+            return;
+          }
+          that.loading = true;
+
+          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/storage/' + hero.repo + '/' + hero.path + '/' + hero.name + '?properties';
+          
+          let payload = ''
+          $.ajax({
+              type: "GET",
+              url: baseUrl,
+              data: payload,
+              contentType: "application/json",
+              dataType:'json',
+              success: function (data) {
+                  that.loading = false;
+                  that.$message({
+                    showClose: true,
+                    message: 'Loaded',
+                    type: 'success'
+                  });
+                  console.log('data.properties=', data.properties);
+                  that.hero.nickname = data.properties.nickname?data.properties.nickname[0]:'';
+                  that.hero.type = data.properties.type?data.properties.type[0]:'';
+                  that.hero.tag = data.properties.tag?data.properties.tag[0]:'';
+                  that.hero.tested = data.properties.tested?Boolean(data.properties.tested[0]):false;
+                  console.log('that.hero=', that.hero);
+              },
+              error: function(res) {
+                that.loading = false;
+                that.$message({
+                  showClose: true,
+                  message: 'Loaded',
+                  type: 'success'
+                });
+                console.log(res.status, res.responseText);
+              }
+          });
+        },
+        fnNext: function(step){
+          let that = this;
+          if(that.loading){
+            that.$message({
+              showClose: true,
+              message: 'Loading... try again',
+              type: 'warn'
+            });
+            return;
+          }
+
+          if(!step){
+            step = 1;
+          }
+          
+          let nextIndex = that.heroIndex + step;
+          if(nextIndex >=0 ){
+            that.heroIndex = nextIndex % that.heroList.length;
+          } else {
+            that.heroIndex = that.heroList.length - 1;
+          }
+          that.hero = that.heroList[that.heroIndex];
+          that.fnGetHeroDetails(that.hero);
+          // console.log(that.hero);
+          
+        },
+        fnPrevious: function(){
+          this.fnNext(-1);
+        },
+        fnUpdate: function () {
+          let that = this;
+          if(that.loading){
+            that.$message({
+              showClose: true,
+              message: 'Loading... try again',
+              type: 'warn'
+            });
+            return;
+          }
+          that.loading = true;
+
+          let baseUrl = '';
+
+          baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/metadata/'+ that.hero.repo +'/' + that.hero.path + '/' + that.hero.name;
+                    
+          let payload = '{"props":{"nickname": "'+ that.hero.nickname +'", "type": "'+ that.hero.type +'", "tag": "'+ that.hero.tag +'", "tested": "'+ that.hero.tested +'"}}';
+          $.ajax({
+              type: "PATCH",
+              url: baseUrl,
+              data: payload,
+              contentType: "application/json",
+              dataType:'json',
+              success: function (data) {
+                that.loading = false;
+                that.$message({
+                  showClose: true,
+                  message: '修改成功',
+                  type: 'success'
+                });
+
+                let from = '';
+                let to = '';
+                if(that.hero.tested){
+                  that.hero.repo = that.testRepo;
+                  from = that.devRepo + '/' + that.hero.path + '/' + that.hero.name;
+                  to = that.testRepo + '/' + that.hero.path + '/' + that.hero.name;
+                } else {
+                  that.hero.repo = that.devRepo;
+                  from = that.testRepo + '/' + that.hero.path + '/' + that.hero.name;
+                  to = that.devRepo + '/' + that.hero.path + '/' + that.hero.name;
+                }
+                
+                that.fnMoveOrCopy(true, from, to);
+              
+              }, 
+              error: function(res) {
+                that.loading = false;
+              }
+          });
+        },
+        fnMoveOrCopy: function (isMove, from, to) {
+          let that = this;
+          // bg task, no loading = true
+
+          let baseUrl = '';
+          let oldRepo = ''
+
+          if(that.hero.tested){
+            oldRepo = that.devRepo;
+            that.hero.repo = that.testRepo;
+          } else {
+            oldRepo = that.testRepo;
+            that.hero.repo = that.devRepo;
+          }
+
+          if(isMove){
+            baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/move/'+ from + '?to=/' + to;
+          } else {
+            baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/copy/'+ from + '?to=/' + to;
+          }
+          
+          let payload = '';
+          $.ajax({
+              type: "POST",
+              url: baseUrl,
+              data: payload,
+              contentType: "text/plain",
+              dataType:'json',
+              success: function (data) {
+                
+                if(data.messages && data.messages.length > 0 && data.messages[0].level == 'INFO'){
+                  that.$message({
+                    showClose: true,
+                    message: '晋级成功',
+                    type: 'success'
+                  });
+                } else {
+                  that.$message({
+                    showClose: true,
+                    message: data.messages[0].message,
+                    type: 'error'
+                  });
+                }
+                console.log('rest=', data);
+                
+              }, 
+              error: function(res) {
+                
+              }
+          });
+        },
+        fnCreateRelease: function(){
+          let that = this;
+          if(that.loading){
+            that.$message({
+              showClose: true,
+              message: 'Loading... try again',
+              type: 'warn'
+            });
+            return;
+          }
+          that.loading = true;
+        
+          // create directory
+          let timestamp = new Date().toStringLong();
+          let releasePath = 'metaverse/' + that.releaseBundle.name + '_' + timestamp;
+          let baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/' + that.prodRepo + '/' + releasePath + '/';
+          
+          let payload = '';
+          $.ajax({
+              type: "PUT",
+              url: baseUrl,
+              data: payload,
+              contentType: "application/json",
+              dataType:'json',
+              success: function (data) {
+                  that.loading = false;
+
+                  // search by aql
+                  baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+          
+                  payload = that.releaseBundle.aql;
+                  $.ajax({
+                      type: "POST",
+                      url: baseUrl,
+                      data: payload,
+                      contentType: "text/plain",
+                      dataType:'json',
+                      success: function (data) {
+                          that.loading = false;
+
+                          // copy
+                          data.results.forEach(e => {
+                            let from = e.repo + '/' + e.path + '/' + e.name
+                            let to = that.prodRepo + '/' + releasePath + '/' + e.name
+                            that.fnMoveOrCopy(false, from, to);
+                          })
+                          
+                      }, error:function(data){
+                        that.loading = false;
+                      }
+                  });
+                  
+              }, error:function(data){
+                that.loading = false;
+              }
+          });
+
+        },
+        fnAQL: function(){
+          let that = this;
+        
+          // search by aql
+          let baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+          
+          let payload = that.releaseBundle.aql;
+          $.ajax({
+              type: "POST",
+              url: baseUrl,
+              data: payload,
+              contentType: "text/plain",
+              dataType:'json',
+              success: function (data) {
+                  
+                that.$message({
+                    showClose: true,
+                    message: 'Success',
+                    type: 'success'
+                  });
+                  
+              }, error:function(data){
+                that.$message({
+                  showClose: true,
+                  message: data.messages[0].message,
+                  type: 'error'
+                });
+              }
+          });
+
+        },
+        fnGetReleaseList: function () {
+          let that = this;
+          
+          // url = url + '&deep=0&listFolders=1&mdTimestamps=1' in proxy.js
+          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/storage/' + that.prodRepo + '/metaverse?list'; 
+          
+          let payload = ''
+          $.ajax({
+              type: "GET",
+              url: baseUrl,
+              data: payload,
+              contentType: "text/plain",
+              dataType:'json',
+              success: function (data) {
+                  
+
+                  that.tableData = [];
+                  data.files.forEach(e => {
+
+                    let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.prodRepo +'"},"path": {"$match" : "metaverse'+ e.uri +'"}}]}]})';
+                    that.fnGetHeroList(payload, function(data){
+                      data.results.forEach(e=>{
+                        e.url = '../hero/' + e.name
+                      })
+                      that.tableData.push({
+                        repo: that.prodRepo,
+                        releasePath: 'metaverse' + e.uri,
+                        heroList: data.results
+                      });
+                    });
+
+                  });
+                  
+              }, error:function(data){
+                
+              }
+          });
+        }
+      }
+    })
+  </script>
+</html>
