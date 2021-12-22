@@ -79,7 +79,7 @@
       </el-row>
 
       <el-tabs v-model="activeName" type="card"   style="margin: 0 auto; width: 1200px">
-        <el-tab-pane label="0. 架构图" name="zero">
+        <el-tab-pane label="1. 畅想元宇宙" name="1">
           
           <el-row type="flex" justify="center">
             <el-col :span="1">
@@ -87,13 +87,11 @@
             </el-col>
     
             <el-col :span="20">
-              <div v-for="slide in slideList">
-                <el-image
-                  style="width: 100%"
-                  :src="slide"
-                  >
-                </el-image>
-              </div>
+              <el-image
+                style="width: 100%"
+                :src="slideList[0]"
+                >
+              </el-image>
             </el-col>
     
             <el-col :span="1">
@@ -102,7 +100,28 @@
           </el-row>
         
         </el-tab-pane>
-        <el-tab-pane label="1. 开发" name="first">
+        <el-tab-pane label="2. Demo 架构图" name="2">
+          
+          <el-row type="flex" justify="center">
+            <el-col :span="1">
+              
+            </el-col>
+    
+            <el-col :span="20">
+              <el-image
+                style="width: 100%"
+                :src="slideList[1]"
+                >
+              </el-image>
+            </el-col>
+    
+            <el-col :span="1">
+              
+            </el-col>
+          </el-row>
+        
+        </el-tab-pane>
+        <el-tab-pane label="2.1 模拟开发" name="3">
           
           <div style="text-align: center;  margin-top: 100px;">
             <h1>JFrog CLI 是一个小巧灵敏的客户端命令行工具</h1>
@@ -117,12 +136,15 @@
 
             2. 上传制品 <br>
             ./02_upload_heros_by_cli.sh <br><br>
+
+            3. 准备开始测试 <br>
+            ./03_run_ui_proxy.sh <br><br>
           </div>
 
         
         
         </el-tab-pane>
-        <el-tab-pane label="2. 测试" name="second">
+        <el-tab-pane label="2.2 模拟测试" name="4">
     
           <el-row type="flex" justify="center" align="middle" class="" style="margin-top: 0px;">
             
@@ -188,7 +210,7 @@
     
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="3. 质量门禁" name="third">
+        <el-tab-pane label="2.3 质量门禁" name="5">
           
           <el-row type="flex" justify="center">
             <el-col :span="4">
@@ -212,7 +234,7 @@ items.find({
       [{
       "repo": {"$eq" : "app1-generic-test-local"},
       "path": {"$match" : "metaverse/hero"},
-      "@nickname": {"$match" : "luban"}
+      "@tag": {"$match" : "蹲草三姐妹"}
       }]
     },
     {
@@ -220,7 +242,7 @@ items.find({
       [{
       "repo": {"$eq" : "app1-generic-test-local"},
       "path": {"$match" : "metaverse/hero"},
-      "@nickname": {"$match" : "赵云"}
+      "@tag": {"$match" : "1.1.*"}
       }]
     }
   ]
@@ -251,7 +273,7 @@ items.find({
           </el-row>
           
         </el-tab-pane>
-        <el-tab-pane label="4. 进入猿宇宙" name="fourth">
+        <el-tab-pane label="3. 进入猿宇宙" name="6">
           
           <el-row type="flex" justify="center">
             <el-col :span="4">
@@ -290,7 +312,7 @@ items.find({
 
         </el-tab-pane>
 
-        <el-tab-pane label="5. 扫码抽奖" name="fifth">
+        <el-tab-pane label="4. 扫码抽奖" name="7">
           
           <el-row type="flex" justify="center">
             <el-col :span="1">
@@ -298,13 +320,11 @@ items.find({
             </el-col>
     
             <el-col :span="20">
-              
-                <el-image
-                  style="width: 100%"
-                  :src="lastSlide"
-                  >
-                </el-image>
-              
+              <el-image
+                style="width: 100%"
+                :src="slideList[2]"
+                >
+              </el-image>
             </el-col>
     
             <el-col :span="1">
@@ -328,7 +348,13 @@ items.find({
     new Vue({
       el: '#app',
       data: function() {
-        return { 
+        return {
+          
+          ART_URL: 'https://soleng.jfrog.io',
+          DEV_REPO:'app1-generic-dev-local',
+          TEST_REPO:'app1-generic-test-local',
+          PROD_REPO:'app1-generic-prod-local',
+
           loading: false,
           id: undefined,
           user: {
@@ -336,14 +362,8 @@ items.find({
             password: 'zhang',
           },
           hasLogin: false,
-          logo: 'images/Jfrog_Green_RGB.png',
+          logo: 'images/JFrog_Green_RGB.png',
           slideList: [],
-          lastSlide: 'images/meta/Slide2.png',
-
-          devRepo:'app1-generic-dev-local',
-          testRepo:'app1-generic-test-local',
-          prodRepo:'app1-generic-prod-local',
-
           hero: {
             name: 'xxx.jpg',
             
@@ -354,9 +374,9 @@ items.find({
           },
           heroIndex: 0,
           heroList:[],
-          activeName: 'zero',
+          activeName: '1',
           releaseBundle: {
-            name: '',
+            name: 'release_x',
             // aql:'items.find({"$or":[{"$and":[{"repo": {"$eq" : "app1-generic-test-local"},"path": {"$match" : "metaverse/hero"},"@nickname": {"$match" : "luban"}}]}]})'
             aql: ''
           },
@@ -371,7 +391,7 @@ items.find({
             return this.getFullYear() + "-" + ("0" + (this.getMonth() + 1)).slice(-2) + "-" + ("0" + this.getDate()).slice(-2) + "_" + ("0" + this.getHours()).slice(-2) + ":" + ("0" + this.getMinutes()).slice(-2) + ":" + ("0" + this.getSeconds()).slice(-2);
         };
 
-        for (let i=1; i<=1; i++) {
+        for (let i=1; i<=3; i++) {
           this.slideList.push('images/meta/Slide' + i + '.png');
         }
         
@@ -393,7 +413,7 @@ items.find({
           console.log('request id=' + this.id)
         } 
 
-        let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.devRepo +'"},"path": {"$match" : "metaverse/hero"}}]},{"$and":[{"repo": {"$eq" : "'+ that.testRepo +'"},"path": {"$match" : "metaverse/hero"}}]}]})';
+        let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.DEV_REPO +'"},"path": {"$match" : "metaverse/hero"}}]},{"$and":[{"repo": {"$eq" : "'+ that.TEST_REPO +'"},"path": {"$match" : "metaverse/hero"}}]}]})';
         this.fnGetHeroList(payload, function(data){
           that.heroList = data.results.map(e => {
             let item = {
@@ -442,7 +462,7 @@ items.find({
         fnGetHeroList: function (payload, callback) {
           let that = this;
         
-          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+          const baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/search/aql';
           
           $.ajax({
               type: "POST",
@@ -471,7 +491,7 @@ items.find({
           }
           that.loading = true;
 
-          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/storage/' + hero.repo + '/' + hero.path + '/' + hero.name + '?properties';
+          const baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/storage/' + hero.repo + '/' + hero.path + '/' + hero.name + '?properties';
           
           let payload = ''
           $.ajax({
@@ -548,7 +568,7 @@ items.find({
 
           let baseUrl = '';
 
-          baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/metadata/'+ that.hero.repo +'/' + that.hero.path + '/' + that.hero.name;
+          baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/metadata/'+ that.hero.repo +'/' + that.hero.path + '/' + that.hero.name;
                     
           let payload = '{"props":{"nickname": "'+ that.hero.nickname +'", "type": "'+ that.hero.type +'", "tag": "'+ that.hero.tag +'", "tested": "'+ that.hero.tested +'"}}';
           $.ajax({
@@ -568,13 +588,13 @@ items.find({
                 let from = '';
                 let to = '';
                 if(that.hero.tested){
-                  that.hero.repo = that.testRepo;
-                  from = that.devRepo + '/' + that.hero.path + '/' + that.hero.name;
-                  to = that.testRepo + '/' + that.hero.path + '/' + that.hero.name;
+                  that.hero.repo = that.TEST_REPO;
+                  from = that.DEV_REPO + '/' + that.hero.path + '/' + that.hero.name;
+                  to = that.TEST_REPO + '/' + that.hero.path + '/' + that.hero.name;
                 } else {
-                  that.hero.repo = that.devRepo;
-                  from = that.testRepo + '/' + that.hero.path + '/' + that.hero.name;
-                  to = that.devRepo + '/' + that.hero.path + '/' + that.hero.name;
+                  that.hero.repo = that.DEV_REPO;
+                  from = that.TEST_REPO + '/' + that.hero.path + '/' + that.hero.name;
+                  to = that.DEV_REPO + '/' + that.hero.path + '/' + that.hero.name;
                 }
                 
                 that.fnMoveOrCopy(true, from, to);
@@ -593,17 +613,17 @@ items.find({
           let oldRepo = ''
 
           if(that.hero.tested){
-            oldRepo = that.devRepo;
-            that.hero.repo = that.testRepo;
+            oldRepo = that.DEV_REPO;
+            that.hero.repo = that.TEST_REPO;
           } else {
-            oldRepo = that.testRepo;
-            that.hero.repo = that.devRepo;
+            oldRepo = that.TEST_REPO;
+            that.hero.repo = that.DEV_REPO;
           }
 
           if(isMove){
-            baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/move/'+ from + '?to=/' + to;
+            baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/move/'+ from + '?to=/' + to;
           } else {
-            baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/copy/'+ from + '?to=/' + to;
+            baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/copy/'+ from + '?to=/' + to;
           }
           
           let payload = '';
@@ -651,7 +671,7 @@ items.find({
           // create directory
           let timestamp = new Date().toStringLong();
           let releasePath = 'metaverse/' + that.releaseBundle.name + '_' + timestamp;
-          let baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/' + that.prodRepo + '/' + releasePath + '/';
+          let baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/' + that.PROD_REPO + '/' + releasePath + '/';
           
           let payload = '';
           $.ajax({
@@ -664,7 +684,7 @@ items.find({
                   that.loading = false;
 
                   // search by aql
-                  baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+                  baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/search/aql';
           
                   payload = that.releaseBundle.aql;
                   $.ajax({
@@ -679,7 +699,7 @@ items.find({
                           // copy
                           data.results.forEach(e => {
                             let from = e.repo + '/' + e.path + '/' + e.name
-                            let to = that.prodRepo + '/' + releasePath + '/' + e.name
+                            let to = that.PROD_REPO + '/' + releasePath + '/' + e.name
                             that.fnMoveOrCopy(false, from, to);
                           })
                           
@@ -698,7 +718,7 @@ items.find({
           let that = this;
         
           // search by aql
-          let baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/search/aql';
+          let baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/search/aql';
           
           let payload = that.releaseBundle.aql;
           $.ajax({
@@ -729,7 +749,7 @@ items.find({
           let that = this;
           
           // url = url + '&deep=0&listFolders=1&mdTimestamps=1' in proxy.js
-          const baseUrl = 'http://localhost:8080?url=https://soleng.jfrog.io/artifactory/api/storage/' + that.prodRepo + '/metaverse?list'; 
+          const baseUrl = 'http://localhost:8080?url='+ that.ART_URL +'/artifactory/api/storage/' + that.PROD_REPO + '/metaverse?list'; 
           
           let payload = ''
           $.ajax({
@@ -744,13 +764,13 @@ items.find({
                   that.tableData = [];
                   data.files.forEach(e => {
 
-                    let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.prodRepo +'"},"path": {"$match" : "metaverse'+ e.uri +'"}}]}]})';
+                    let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.PROD_REPO +'"},"path": {"$match" : "metaverse'+ e.uri +'"}}]}]})';
                     that.fnGetHeroList(payload, function(data){
                       data.results.forEach(e=>{
                         e.url = '../hero/' + e.name
                       })
                       that.tableData.push({
-                        repo: that.prodRepo,
+                        repo: that.PROD_REPO,
                         releasePath: 'metaverse' + e.uri,
                         heroList: data.results
                       });
