@@ -221,7 +221,7 @@
 
               <div>
                 <h1>Artifactory 查询语言 (AQL)</h1> 
-                专门设计用于让您发现与 Artifactory 中存储的工件和构建相关的任何数据。 <br>
+                专门设计用于让您发现与 Artifactory 中存储的制品和构建相关的任何数据。 <br>
                 它的语法提供了一种制定复杂查询的简单方法，这些查询指定了任意数量的搜索条件、过滤器、排序选项和输出参数。 <br>
                 AQL 作为 RESTful API 公开，它使用数据流来提供输出数据，从而实现极快的响应时间和低内存消耗。<br><br>
                <h3> AQL 参考样例 </h3>
@@ -280,6 +280,9 @@ items.find({
             </el-col>
     
             <el-col :span="20">
+              <div style="text-align: right;">
+                <el-button type="primary" @click="fnGetReleaseList()">Refresh</el-button>
+              </div>
               <el-table
                 :data="tableData"
                 style="width: 100%">
