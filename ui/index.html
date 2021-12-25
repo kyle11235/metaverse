@@ -416,29 +416,7 @@ items.find({
           console.log('request id=' + this.id)
         } 
 
-        let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.DEV_REPO +'"},"path": {"$match" : "metaverse/hero"}}]},{"$and":[{"repo": {"$eq" : "'+ that.TEST_REPO +'"},"path": {"$match" : "metaverse/hero"}}]}]})';
-        this.fnGetHeroList(payload, function(data){
-          that.heroList = data.results.map(e => {
-            let item = {
-              name: e.name,
-              repo: e.repo,
-              path: e.path,
-              
-              nickname: '',
-              type: '',
-              tag: '',
-              tested: false,
-
-              url: '../hero/' + e.name
-            }
-            return item;
-          });
-          if(that.heroList.length > 0){
-            that.hero = that.heroList[0];
-            that.fnGetHeroDetails(that.hero);
-          }
-        });
-
+        that.fnGetHeroListDEVTEST();
         that.fnGetReleaseList();
       },
       methods: {
@@ -480,6 +458,31 @@ items.find({
               }, error:function(data){
                 
               }
+          });
+        },
+        fnGetHeroListDEVTEST: function(){
+          let that = this;
+          let payload = 'items.find({"$or":[{"$and":[{"repo": {"$eq" : "'+ that.DEV_REPO +'"},"path": {"$match" : "metaverse/hero"}}]},{"$and":[{"repo": {"$eq" : "'+ that.TEST_REPO +'"},"path": {"$match" : "metaverse/hero"}}]}]})';
+          this.fnGetHeroList(payload, function(data){
+            that.heroList = data.results.map(e => {
+              let item = {
+                name: e.name,
+                repo: e.repo,
+                path: e.path,
+                
+                nickname: '',
+                type: '',
+                tag: '',
+                tested: false,
+
+                url: '../hero/' + e.name
+              }
+              return item;
+            });
+            if(that.heroList.length > 0){
+              that.hero = that.heroList[0];
+              that.fnGetHeroDetails(that.hero);
+            }
           });
         },
         fnGetHeroDetails: function (hero) {
